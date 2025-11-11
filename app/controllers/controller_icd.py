@@ -36,7 +36,7 @@ def add_icd(data, session, current_user) -> Optional[ICD]:
     try:
         obj = ICD(
             code=data.code,
-            description=data.desscription
+            description=data.description
         )
         session.add(obj)
         session.commit()

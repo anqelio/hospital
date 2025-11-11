@@ -10,7 +10,7 @@ router = APIRouter()
 def router_get_patient_by_id(
     patient_id: int,
     session: Session = Depends(get_session),
-    current_user: User = Depends(require_roles(["main_doctor", "employee_doctor"]))
+    current_user: User = Depends(require_roles(["main_doctor", "employee_hospital"]))
 ):
     return get_patient_by_id(patient_id, session, current_user)
 
@@ -18,7 +18,7 @@ def router_get_patient_by_id(
 def router_add_patient(
     data: PatientCreate,
     session: Session = Depends(get_session),
-    current_user: User = Depends(require_roles(["employee_doctor"]))
+    current_user: User = Depends(require_roles(["employee_hospital"]))
 ):
     return add_patient(data, session, current_user)
 
@@ -26,7 +26,7 @@ def router_add_patient(
 def router_delete_patient(
     patient_id: int,
     session: Session = Depends(get_session),
-    current_user: User = Depends(require_roles(["employee_doctor"]))
+    current_user: User = Depends(require_roles(["employee_hospital"]))
 ):
     return delete_patient(patient_id, session, current_user)
 
@@ -35,7 +35,7 @@ def router_update_patient(
     patient_id: int,
     data: User,
     session: Session = Depends(get_session),
-    current_user: User = Depends(require_roles(["employee_doctor"]))
+    current_user: User = Depends(require_roles(["employee_hospital"]))
 ):
     return update_patient(patient_id, data, session, current_user)
 

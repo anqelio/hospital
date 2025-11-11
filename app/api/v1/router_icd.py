@@ -10,7 +10,7 @@ router = APIRouter()
 def router_get_icd_by_id(
     icd_id: int,
     session: Session = Depends(get_session),
-    current_user: User = Depends(require_roles(["main_doctor", "employee_doctor"]))
+    current_user: User = Depends(require_roles(["main_doctor", "employee_hospital"]))
 ):
     return get_icd_by_id(icd_id, session, current_user)
 
@@ -18,7 +18,7 @@ def router_get_icd_by_id(
 def router_add_icd(
     data: CreateICD,
     session: Session = Depends(get_session),
-    current_user: User = Depends(require_roles(["employee_hospital"]))
+    current_user: User = Depends(require_roles(["main_doctor", "employee_hospital"]))
 ):
     return add_icd(data, session, current_user)
 
@@ -26,7 +26,7 @@ def router_add_icd(
 def router_delete_icd(
     icd_id: int,
     session: Session = Depends(get_session),
-    current_user: User = Depends(require_roles(["employee_hospital"]))
+    current_user: User = Depends(require_roles(["main_doctor", "employee_hospital"]))
 ):
     return delete_icd(icd_id, session, current_user)
 
@@ -35,7 +35,7 @@ def router_update_icd(
     icd_id: int,
     data: User,
     session: Session = Depends(get_session),
-    current_user: User = Depends(require_roles(["employee_hospital"]))
+    current_user: User = Depends(require_roles(["main_doctor", "employee_hospital"]))
 ):
     return update_icd(icd_id, data, session, current_user)
 
@@ -44,6 +44,6 @@ def router_show_icd(
     session: Session = Depends(get_session),
     page: int = 1,
     size: int = 10,
-    current_user: User = Depends(require_roles(["main_doctor", "employee_doctor"]))
+    current_user: User = Depends(require_roles(["main_doctor", "employee_hospital"]))
 ):
     return show_icd(session, page, size, current_user)
