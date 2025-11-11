@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
 from fastapi_pagination import add_pagination
+from starlette.staticfiles import StaticFiles
 from app.db.database import *
 from app.models import *
 from app.api.v1.router_user import router as router_user_v1
@@ -30,7 +31,18 @@ app_v1 = FastAPI(title="Hospital API v1", version="1.0.0",
                  description='Приложение, предназначенное для обработки данных о пациентах стационара больницы.'
                  , lifespan=on_startup)
 
+app_v2 = FastAPI(
+    title="Hospital API v2", version="2.0.0",
+    openapi_url="/api/v2/openapi.json", docs_url="/api/v2/docs",
+    redoc_url="/api/v2/redoc",
+    description='Приложение, работающее без сети, предназначенное для обработки данных о пациентах стационара больницы.',
+    swagger_ui_oauth2_redirect_url="/docs/oauth2-redirect",
+    lifespan=on_startup)
+
+app_v2.mount("/dist", StaticFiles(directory="dist"), name="dist")
+
 main_app.mount("/api/v1", app_v1)
+main_app.mount("/api/v2", app_v2)
 
 app_v1.include_router(router_auth_v1, tags=['Authorization'])
 app_v1.include_router(router_user_v1, tags=['User'])
@@ -43,3 +55,15 @@ app_v1.include_router(router_referral_v1, tags=['Referral'])
 app_v1.include_router(router_medical_record_v1, tags=['MedicalRecord'])
 app_v1.include_router(router_daily_record_v1, tags=['DailyRecord'])
 add_pagination(app_v1)
+
+app_v2.include_router(router_auth_v1, tags=['Authorization'])
+app_v2.include_router(router_user_v1, tags=['User'])
+app_v2.include_router(router_ward_v1, tags=['Ward'])
+app_v2.include_router(router_department_v1, tags=['Department'])
+app_v2.include_router(router_doctor_v1, tags=['Doctor'])
+app_v2.include_router(router_patient_v1, tags=['Patient'])
+app_v2.include_router(router_icd_v1, tags=['ICD'])
+app_v2.include_router(router_referral_v1, tags=['Referral'])
+app_v2.include_router(router_medical_record_v1, tags=['MedicalRecord'])
+app_v2.include_router(router_daily_record_v1, tags=['DailyRecord'])
+add_pagination(app_v2)
